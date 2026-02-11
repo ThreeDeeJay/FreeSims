@@ -489,7 +489,7 @@ namespace FSO.LotView
             pxOffset = newOff;
 
             if (recacheTerrain)
-                Blueprint.Terrain.RegenTerrain(gd, state, Blueprint);
+                Blueprint.Terrain.RegenTerrain(gd, Blueprint);
 
             if (recacheWalls)
             {
@@ -679,17 +679,8 @@ namespace FSO.LotView
             ClearDrawBuffer(StaticFloorCache);
             ClearDrawBuffer(StaticObjectsCache);
         }
-    }
 
-    public class WorldObjectRenderInfo
-    {
-        public WorldObjectRenderLayer Layer = WorldObjectRenderLayer.STATIC;
-    }
 
-    public enum WorldObjectRenderLayer
-    {
-        STATIC,
-        DYNAMIC
     }
 
     public struct WorldTileRenderingInfo

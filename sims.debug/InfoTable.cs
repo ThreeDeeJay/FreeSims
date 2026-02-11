@@ -49,6 +49,9 @@ namespace sims.debug
         [XmlAttribute("l")]
         public string Layer;
 
+        [XmlAttribute("f")]
+        public string Flags;
+
     }
 
     

@@ -4,18 +4,28 @@
  * http://mozilla.org/MPL/2.0/. 
  */
 
+using FSO.Common.Rendering.Framework.Camera;
+using FSO.LotView.Components;
+using FSO.LotView.Model;
+using FSO.LotView.Platform;
+using FSO.LotView.Utils;
+using GOLDEngine;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using FSO.Common.Rendering.Framework.Camera;
-using Microsoft.Xna.Framework;
-using FSO.LotView.Utils;
-using Microsoft.Xna.Framework.Graphics;
-using FSO.LotView.Components;
+using System.Windows.Forms;
 
 namespace FSO.LotView
 {
+    public enum CameraRenderMode
+    {
+        _2D = 1,
+        _2DRotate = 2, //2d camera, but must render with 3d instead
+        _3D = 3
+    }
     /// <summary>
     /// Holds state information retaining to world.
     /// </summary>
@@ -23,7 +33,11 @@ namespace FSO.LotView
     {
         private World World;
         public GraphicsDevice Device;
-
+        public IWorldPlatform Platform;
+        public CameraRenderMode CameraMode = CameraRenderMode._2D;
+        public bool ForceImmediate = false;
+        public Texture2D OutsidePx;
+       
         /// <summary>
         /// Creates a new WorldState instance.
         /// </summary>
@@ -37,7 +51,7 @@ namespace FSO.LotView
             this.World = world;
             this.WorldCamera = new WorldCamera(device);
             WorldCamera.ViewDimensions = new Vector2(worldPxWidth, worldPxHeight);
-
+            
             WorldSpace = new WorldSpace(worldPxWidth, worldPxHeight, this);
             Zoom = WorldZoom.Near;
             Rotation = WorldRotation.TopLeft;
@@ -67,9 +81,12 @@ namespace FSO.LotView
         public Texture2D AmbientLight;
         public Color OutsideColor; //temporary to give this to terrain component. in future it will use ambient light texture
         public bool DynamicCutaway;
-
+        public Matrix Projection => Camera.Projection;
+        public Matrix View => Camera.View;
         public AvatarComponent ScrollAnchor;
-
+        public Matrix ViewProjection;
+        public BoundingFrustum Frustum;
+        public Rectangle WorldRectangle;
         private int _WorldSize;
 
         /// <summary>
@@ -230,6 +247,26 @@ namespace FSO.LotView
             InvalidateCamera();
         }
 
+        public void PrepareCulling(Vector2 pxOffset)
+        {
+            var size = new Vector2(_2D.LastWidth, _2D.LastHeight);
+            var mainBd = WorldSpace.GetScreenFromTile(CenterTile);
+            var diff = pxOffset - mainBd;
+            WorldRectangle = new Rectangle((pxOffset).ToPoint(), size.ToPoint());
+            if (PreciseZoom != 1)
+            {
+                var newSize = WorldRectangle.Size.ToVector2() / PreciseZoom;
+                WorldRectangle.Location -= ((newSize - WorldRectangle.Size.ToVector2()) / 2f).ToPoint();
+                WorldRectangle.Size = newSize.ToPoint();
+            }
+
+            var view = View;
+            ViewProjection = view * Projection;
+            Frustum = new BoundingFrustum(ViewProjection);
+        }
+
+
+
         public void InvalidateCamera()
         {
             WorldCamera.CenterTile = CenterTile;
@@ -268,7 +305,7 @@ namespace FSO.LotView
         public float WorldPxWidth;
         public float WorldPxHeight;
         public float OneUnitDistance;
-
+        public Vector2 WorldPx => new Vector2(WorldPxWidth, WorldPxHeight);
         private WorldState State;
 
         /// <summary>
@@ -290,6 +327,12 @@ namespace FSO.LotView
             WorldPxHeight = dim.Y;
         }
 
+        
+        public float GetDepthFromTile(Vector3 tile)
+        {
+            var pos = GetScreenFromTile(tile);
+            return pos.Y + tile.Z * OneUnitDistance * 2;
+        }
         /// <summary>
         /// Gets the offset for the screen based on the scroll position
         /// </summary>

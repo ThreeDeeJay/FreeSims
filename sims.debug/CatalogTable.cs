@@ -42,11 +42,6 @@ namespace sims.debug
         [XmlAttribute("p")]
         public uint Price;
 
-        [XmlAttribute("m")]
-        public ushort Group;
-
-        [XmlAttribute("i")]
-        public short SubIndex;
 
     }
 

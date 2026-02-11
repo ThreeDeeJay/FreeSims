@@ -25,6 +25,7 @@ using FSO.LotView;
 using SimsNet.Properties;
 using FSO.LotView.Model;
 using FSO.Files.Formats.IFF;
+using FSO.Client;
 
 namespace SimsNet
 {
@@ -37,6 +38,7 @@ namespace SimsNet
         private int Port;
         private string LotName;
         private bool TS1, Dedicated;
+        private TSOGame Game;
 
         public VMInstance(int port)
         {
@@ -44,7 +46,8 @@ namespace SimsNet
             Port = port;
             TS1 = false;
             Dedicated = false;
-            WorldContent content = new WorldContent(); 
+            Game = new TSOGame();
+            
             ResetVM();
         }
 
@@ -141,13 +144,17 @@ namespace SimsNet
                     }
                     catch (Exception) { }
 
-                        //vm.SendCommand(new VMBlueprintRestoreCmd
-                        //{
-                        // JobLevel = jobLevel,
-                        // XMLData = File.ReadAllBytes(path)
-                        //});
+                        
                         if (File.Exists(path))
                         {
+
+                            vm.SendCommand(new VMBlueprintRestoreCmd
+                            {
+                             JobLevel = jobLevel,
+                             XMLData = File.ReadAllBytes(path)
+                            });
+
+
                             using (var stream = new MemoryStream(File.ReadAllBytes(path)))
                             {
                                 lotInfo = XmlHouseData.Parse(stream);

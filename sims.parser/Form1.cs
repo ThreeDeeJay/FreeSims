@@ -18,7 +18,8 @@ namespace FileParser
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            SimsGame = null;
+            string[] Items = new string[3];
         }
 
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)

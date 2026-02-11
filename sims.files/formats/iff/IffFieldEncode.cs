@@ -55,19 +55,10 @@ namespace FSO.Files.Formats.IFF.Chunks
 
         public byte ReadByte()
         {
-            return (byte)ReadField(widthsByte);
-        }
-
-        public void Interrupt()
-        {
-            long targetPos = io.Position;
-
-            if (bitPos == 0)
-            {
-                targetPos--;
-            }
-
-            io.Seek(SeekOrigin.Begin, targetPos);
+            if (ReadBit() == 0) return 0;
+        
+            return (byte) ReadField(widthsByte);
+        
         }
 
         public string BitDebug(int count)
@@ -89,6 +80,18 @@ namespace FSO.Files.Formats.IFF.Chunks
             return result;
         }
 
+        public void Interrupt()
+        {
+            long targetPos = io.Position;
+
+            if (bitPos == 0)
+            {
+                targetPos--;
+            }
+
+            io.Seek(SeekOrigin.Begin, targetPos);
+        }
+
         public string BitDebugTil(long skipPosition)
         {
             long currentPos = bitPos == 0 ? io.Position : io.Position - 1;
@@ -102,6 +105,7 @@ namespace FSO.Files.Formats.IFF.Chunks
 
             return BitDebug(diff);
         }
+        
 
         private long ReadField(byte[] widths)
         {

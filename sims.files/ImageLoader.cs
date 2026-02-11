@@ -20,9 +20,8 @@ namespace FSO.Files
     {
         public static bool UseSoftLoad = true;
         public static int PremultiplyPNG = 0;
-		public Color[] ColorData;
-  		public readonly byte[] ByteData;
-
+        public Color[] ColorData;
+        public readonly byte[] ByteData;
 
         public static HashSet<uint> MASK_COLORS = new HashSet<uint>{
             new Microsoft.Xna.Framework.Color(0xFF, 0x00, 0xFF, 0xFF).PackedValue,

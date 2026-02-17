@@ -40,11 +40,16 @@ namespace FSO.Client
             
             Graphics.PreferredBackBufferWidth = GlobalSettings.Default.GraphicsWidth;
             Graphics.PreferredBackBufferHeight = GlobalSettings.Default.GraphicsHeight;
+
+			if (GraphicsAdapter.DefaultAdapter.IsProfileSupported(GraphicsProfile.HiDef))
+            {
+                Graphics.GraphicsProfile = GraphicsProfile.HiDef;
+            }
             
            // Graphics.HardwareModeSwitch = false;
             Graphics.ApplyChanges();
 
-	    Console.WriteLine("Project FreeSims Started...");
+	    	Console.WriteLine("Project FreeSims Started...");
             Console.WriteLine("SimsVille loading... ");
 
             //disabled for now. It's a hilarious mess and is causing linux to freak out.

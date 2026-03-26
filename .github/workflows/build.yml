@@ -53,23 +53,17 @@ jobs:
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1.0.2
 
-#    - name: Restore
-#      working-directory: ${{env.GITHUB_WORKSPACE}}
-#      run: nuget restore "${{env.Solution}}"
+    - name: Restore
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: nuget restore "${{env.Solution}}"
 
-#    - name: Build
-#      run: >
-#        msbuild
-#        /m "${{env.Solution}}"
-#        /p:Platform="${{matrix.Settings.Architecture}}"
-#        /p:Configuration="${{matrix.Configuration}}"
-#        /p:PlatformToolset="v143"
-
-    - name: Publish
-      run: > 
-        dotnet
-        publish "${{env.Project}}"
-        -c "${{matrix.Configuration}}"
+    - name: Build
+      run: >
+        msbuild
+        /m "${{env.Solution}}"
+        /p:Platform="${{matrix.Settings.Architecture}}"
+        /p:Configuration="${{matrix.Configuration}}"
+        /p:PlatformToolset="v143"
       
     - name: List files
       run: ls -R
@@ -78,7 +72,9 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: ${{env.Title}}-${{matrix.Settings.Name}}-${{matrix.Configuration}}
-        path: "${{github.workspace}}/${{env.Artifacts}}/"
+        path: |
+          "${{github.workspace}}/${{env.Artifacts}}/"
+          "SimsNet/bin/Release"
 
   Release:
     name: Release

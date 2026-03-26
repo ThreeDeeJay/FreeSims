@@ -41,20 +41,6 @@ jobs:
         --recurse-submodules
         --depth 1
 
-    - name: Install NuGet dependencies
-      run: |
-        dotnet add package SharpDX.D3DCompiler --project "SimsVille/SimsVille.csproj"
-        dotnet add package SharpDX.Direct2D1 --project "SimsVille/SimsVille.csproj"
-        dotnet add package SharpDX.Direct3D11 --project "SimsVille/SimsVille.csproj"
-        dotnet add package SharpDX.Direct3D11.Effects --project "SimsVille/SimsVille.csproj"
-        dotnet add package SharpDX.Direct3D9 --project "SimsVille/SimsVille.csproj"
-        dotnet add package SharpDX --project "SimsVille/SimsVille.csproj"
-        dotnet add package SharpDX.DXGI --project "SimsVille/SimsVille.csproj"
-        dotnet add package SharpDX.MediaFoundation --project "SimsVille/SimsVille.csproj"
-        dotnet add package SharpDX.RawInput --project "SimsVille/SimsVille.csproj"
-        dotnet add package SharpDX.XAudio2 --project "SimsVille/SimsVille.csproj"
-        dotnet add package SharpDX.XInput --project "SimsVille/SimsVille.csproj"
-
     - name: Install vcpkg
       uses: lukka/run-vcpkg@v11.5
       with:

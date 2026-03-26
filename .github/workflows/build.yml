@@ -41,13 +41,6 @@ jobs:
         --recurse-submodules
         --depth 1
 
-    - name: Install vcpkg
-      uses: lukka/run-vcpkg@v11.5
-      with:
-        vcpkgGitCommitId: c2aeddd80357b17592e59ad965d2adf65a19b22f
-    - name: Install VCPKG dependencies
-      run: |
-        vcpkg install sdl2 openal-soft --triplet ${{matrix.Settings.Triplet}}
 
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1.0.2
@@ -55,6 +48,14 @@ jobs:
     - name: Restore
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: nuget restore "${{env.Solution}}"
+
+    - name: Install vcpkg
+      uses: lukka/run-vcpkg@v11.5
+      with:
+        vcpkgGitCommitId: c2aeddd80357b17592e59ad965d2adf65a19b22f
+    - name: Install VCPKG dependencies
+      run: |
+        vcpkg install sdl2 openal-soft --triplet ${{matrix.Settings.Triplet}}-${{matrix.Configuration}}
 
     - name: Build
       run: >

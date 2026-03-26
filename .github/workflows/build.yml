@@ -49,6 +49,14 @@ jobs:
         echo "CommitCount=$(git rev-list --count HEAD)" >> $env:GITHUB_ENV
         echo "CommitDate=$(git show -s --date=format:'%Y-%m-%d' --format=%cd)" >> $env:GITHUB_ENV
 
+    - name: Install vcpkg
+      uses: lukka/run-vcpkg@v11.5
+      with:
+        vcpkgGitCommitId: c2aeddd80357b17592e59ad965d2adf65a19b22f
+    - name: Install dependencies
+      run: |
+        vcpkg install sdl2 openal-soft
+
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1.0.2
 
@@ -67,9 +75,14 @@ jobs:
     - name: List files
       run: ls -R
 
-#    - name: Deploy
-#      shell: cmd
-#      run: |
+    - name: Deploy
+      shell: cmd
+      run: |
+        If exist "vcpkg\installed\${{matrix.Settings.Platform}}-windows\bin\*.dll"       (copy "vcpkg\installed\${{matrix.Settings.Platform}}-windows\bin\*.dll"       "${{env.Artifacts}}")
+        If exist "vcpkg_installed\${{matrix.Settings.Platform}}-windows\bin\*.dll"       (copy "vcpkg_installed\${{matrix.Settings.Platform}}-windows\bin\*.dll"       "${{env.Artifacts}}")
+        If exist "SimsNet\bin\Release\*.exe"                                             (copy "SimsNet\bin\Release\*.exe"                                             "${{env.Artifacts}}")
+        If exist "SimsNet\bin\Release\*.config"                                          (copy "SimsNet\bin\Release\*.config"                                          "${{env.Artifacts}}")
+        xcopy "Content\" "${{env.Artifacts}}\Content\" /s
 #        If exist "SimsVille\packages\MonoGame.Framework.WindowsGL.3.4.0.459\lib\net40\*.dll"  (copy "SimsVille\packages\MonoGame.Framework.WindowsGL.3.4.0.459\lib\net40\*.dll"   "${{env.Artifacts}}")
 #        If exist "SimsVille\Dependencies\*.dll"                                               (copy "SimsVille\Dependencies\*.dll"                                                "${{env.Artifacts}}")
 #        If exist "SimsNet\bin\Release\*.dll"                                                  (copy "SimsNet\bin\Release\*.dll"                                                   "${{env.Artifacts}}")

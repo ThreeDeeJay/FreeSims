@@ -4,8 +4,8 @@ name: Build
 env:
   GH_TOKEN: ${{github.token}}
   Branch: ${{github.ref_name}}
-  Artifacts: SimsVille/bin/Release
-#  Artifacts: SimsNet/bin/Release
+#  Artifacts: SimsVille/bin/Release
+  Artifacts: SimsNet/bin/Release
   Title: ${{github.event.repository.name}}
   Solution: SimsVille/SimsVille.sln
 
@@ -40,7 +40,6 @@ jobs:
         "${{github.workspace}}"
         --branch ${{env.Branch}}
         --recurse-submodules
-        --depth 1
 
     - name: Get current date, commit hash and count
       run: |
@@ -63,7 +62,7 @@ jobs:
         /m "${{env.Solution}}"
         /p:Platform="${{matrix.Settings.Architecture}}"
         /p:Configuration="${{matrix.Configuration}}"
-        /p:PlatformToolset=v143
+        /p:PlatformToolset="v143"
       
     - name: List files
       run: ls -R

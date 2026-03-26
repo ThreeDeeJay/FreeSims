@@ -41,6 +41,7 @@ jobs:
         "${{github.workspace}}"
         --branch ${{env.Branch}}
         --recurse-submodules
+        --depth 1
 
     - name: Get current date, commit hash and count
       run: |
@@ -68,14 +69,24 @@ jobs:
     - name: List files
       run: ls -R
 
+    - name: Deploy
+      shell: cmd
+      run: |
+        If exist "SimsVille\packages\MonoGame.Framework.WindowsGL.3.4.0.459\lib\net40\*.dll"  (copy "SimsVille\packages\MonoGame.Framework.WindowsGL.3.4.0.459\lib\net40\*.dll"   "${{env.Artifacts}}")
+        If exist "SimsVille\Dependencies\*.dll"                                               (copy "SimsVille\Dependencies\*.dll"                                                "${{env.Artifacts}}")
+        If exist "SimsNet\bin\Release\*.dll"                                                  (copy "SimsNet\bin\Release\*.dll"                                                   "${{env.Artifacts}}")
+        If exist "sims.parser\bin\Release\*.dll"                                              (copy "sims.parser\bin\Release\*.dll"                                               "${{env.Artifacts}}")
+        If exist "sims.files\bin\Release\*.dll"                                               (copy "sims.files\bin\Release\*.dll"                                                "${{env.Artifacts}}")
+        If exist "sims.debug\bin\Release\*.dll"                                               (copy "sims.debug\bin\Release\*.dll"                                                "${{env.Artifacts}}")
+        If exist "sims.common\bin\Release\*.dll"                                              (copy "sims.common\bin\Release\*.dll"                                               "${{env.Artifacts}}")
+
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: ${{env.Title}}-${{matrix.Settings.Name}}-${{matrix.Configuration}}
         path: |
           "${{github.workspace}}/${{env.Artifacts}}/"
-          "SimsNet/bin/Release"
-
+          
   Release:
     name: Release
     runs-on: windows-latest

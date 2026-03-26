@@ -41,6 +41,14 @@ jobs:
         --recurse-submodules
         --depth 1
 
+    - name: Install vcpkg
+      uses: lukka/run-vcpkg@v11.5
+      with:
+        vcpkgGitCommitId: c2aeddd80357b17592e59ad965d2adf65a19b22f
+
+    - name: Install VCPKG dependencies
+      run: |
+        vcpkg install sdl2 openal-soft --triplet ${{matrix.Settings.Triplet}}
 
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1.0.2
@@ -48,14 +56,6 @@ jobs:
     - name: Restore
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: nuget restore "${{env.Solution}}"
-
-    - name: Install vcpkg
-      uses: lukka/run-vcpkg@v11.5
-      with:
-        vcpkgGitCommitId: c2aeddd80357b17592e59ad965d2adf65a19b22f
-    - name: Install VCPKG dependencies
-      run: |
-        vcpkg install sdl2 openal-soft --triplet ${{matrix.Settings.Triplet}}
 
     - name: Build
       run: >
@@ -102,13 +102,6 @@ jobs:
         move "SimsNet\bin\Release\*.exe"                                                "${{env.Artifacts}}"
         move "SimsNet\bin\Release\*.config"                                             "${{env.Artifacts}}"
         move "SimsVille\Content"                                                        "${{env.Artifacts}}"
-#        If exist "SimsVille\packages\MonoGame.Framework.WindowsGL.3.4.0.459\lib\net40\*.dll"  (copy "SimsVille\packages\MonoGame.Framework.WindowsGL.3.4.0.459\lib\net40\*.dll"   "${{env.Artifacts}}")
-#        If exist "SimsVille\Dependencies\*.dll"                                               (copy "SimsVille\Dependencies\*.dll"                                                "${{env.Artifacts}}")
-#        If exist "SimsNet\bin\Release\*.dll"                                                  (copy "SimsNet\bin\Release\*.dll"                                                   "${{env.Artifacts}}")
-#        If exist "sims.parser\bin\Release\*.dll"                                              (copy "sims.parser\bin\Release\*.dll"                                               "${{env.Artifacts}}")
-#        If exist "sims.files\bin\Release\*.dll"                                               (copy "sims.files\bin\Release\*.dll"                                                "${{env.Artifacts}}")
-#        If exist "sims.debug\bin\Release\*.dll"                                               (copy "sims.debug\bin\Release\*.dll"                                                "${{env.Artifacts}}")
-#        If exist "sims.common\bin\Release\*.dll"                                              (copy "sims.common\bin\Release\*.dll"                                               "${{env.Artifacts}}")
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4

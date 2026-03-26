@@ -57,6 +57,10 @@ jobs:
       run: |
         vcpkg install sdl2 openal-soft --triplet ${{matrix.Settings.Triplet}}
 
+    - name: Install dependencies
+      run: |
+        vcpkg install sdl2 openal-soft --triplet ${{matrix.Settings.Triplet}}
+
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1.0.2
 
@@ -78,11 +82,12 @@ jobs:
     - name: Deploy
       shell: cmd
       run: |
-        If exist "vcpkg\installed\${{matrix.Settings.Triplet}}\bin\*.dll" (copy "vcpkg\installed\${{matrix.Settings.Triplet}}\bin\*.dll"  "${{env.Artifacts}}")
-        If exist "vcpkg_installed\${{matrix.Settings.Triplet}}\bin\*.dll" (copy "vcpkg_installed\${{matrix.Settings.Triplet}}\bin\*.dll"  "${{env.Artifacts}}")
-        If exist "SimsNet\bin\Release\*.exe"                              (copy "SimsNet\bin\Release\*.exe"                               "${{env.Artifacts}}")
-        If exist "SimsNet\bin\Release\*.config"                           (copy "SimsNet\bin\Release\*.config"                            "${{env.Artifacts}}")
-        If exist "SimsVille\Dependencies\*.dll"                           (copy "SimsVille\Dependencies\*.dll"                            "${{env.Artifacts}}")
+        mkdir "${{env.Artifacts}}\Monogame\WindowsGL"
+        If exist "SimsVille\Dependencies\MonoGame.Framework.dll"                    (copy "SimsVille\Dependencies\MonoGame.Framework.dll"                   "${{env.Artifacts}}\Monogame\WindowsGL\MonoGame.Framework.dll")
+        If exist "vcpkg\installed\${{matrix.Settings.Triplet}}\bin\SDL2.dll"        (copy "vcpkg\installed\${{matrix.Settings.Triplet}}\bin\OpenAL32.dll"   "${{env.Artifacts}}\sdl2.dll")
+        If exist "vcpkg\installed\${{matrix.Settings.Triplet}}\bin\OpenAL32.dll"    (copy "vcpkg\installed\${{matrix.Settings.Triplet}}\bin\OpenAL32.dll"   "${{env.Artifacts}}\soft_oal.dll")
+        If exist "SimsNet\bin\Release\*.exe"                                        (move "SimsNet\bin\Release\*.exe"                                       "${{env.Artifacts}}")
+        If exist "SimsNet\bin\Release\*.config"                                     (move "SimsNet\bin\Release\*.config"                                    "${{env.Artifacts}}")
         move "SimsVille\Content" "${{env.Artifacts}}"
 #        If exist "SimsVille\packages\MonoGame.Framework.WindowsGL.3.4.0.459\lib\net40\*.dll"  (copy "SimsVille\packages\MonoGame.Framework.WindowsGL.3.4.0.459\lib\net40\*.dll"   "${{env.Artifacts}}")
 #        If exist "SimsVille\Dependencies\*.dll"                                               (copy "SimsVille\Dependencies\*.dll"                                                "${{env.Artifacts}}")

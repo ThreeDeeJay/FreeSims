@@ -8,6 +8,7 @@ env:
   Artifacts: SimsNet/bin/Release
   Title: ${{github.event.repository.name}}
   Solution: SimsVille/SimsVille.sln
+  Project: SimsVille/SimsVille.csproj
 
 on:
   push:
@@ -67,7 +68,7 @@ jobs:
     - name: Publish
       run: > 
         dotnet
-        publish "${{env.Solution}}"
+        publish "${{env.Project}}"
         -c "${{matrix.Configuration}}"
       
     - name: List files

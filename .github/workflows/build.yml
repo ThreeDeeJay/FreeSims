@@ -4,7 +4,7 @@ name: Build
 env:
   GH_TOKEN: ${{github.token}}
   Branch: ${{github.ref_name}}
-  Artifacts: SimsVille/bin/Release
+  Artifacts: SimsVille\bin\Release
   Title: ${{github.event.repository.name}}
   Solution: SimsVille/SimsVille.sln
 

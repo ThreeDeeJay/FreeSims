@@ -82,6 +82,7 @@ jobs:
         If exist "vcpkg_installed\${{matrix.Settings.Triplet}}\bin\*.dll" (copy "vcpkg_installed\${{matrix.Settings.Triplet}}\bin\*.dll"  "${{env.Artifacts}}")
         If exist "SimsNet\bin\Release\*.exe"                              (copy "SimsNet\bin\Release\*.exe"                               "${{env.Artifacts}}")
         If exist "SimsNet\bin\Release\*.config"                           (copy "SimsNet\bin\Release\*.config"                            "${{env.Artifacts}}")
+        If exist "SimsVille\Dependencies\*.dll"                           (copy "SimsVille\Dependencies\*.dll"                            "${{env.Artifacts}}")
         move "SimsVille\Content" "${{env.Artifacts}}"
 #        If exist "SimsVille\packages\MonoGame.Framework.WindowsGL.3.4.0.459\lib\net40\*.dll"  (copy "SimsVille\packages\MonoGame.Framework.WindowsGL.3.4.0.459\lib\net40\*.dll"   "${{env.Artifacts}}")
 #        If exist "SimsVille\Dependencies\*.dll"                                               (copy "SimsVille\Dependencies\*.dll"                                                "${{env.Artifacts}}")
@@ -118,7 +119,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{env.Title}}-Win32-Release
-          path: Release/Win32/
+          path: Release/
 
       - name: Deploy
         run: |

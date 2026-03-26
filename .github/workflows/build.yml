@@ -22,19 +22,13 @@ jobs:
     runs-on: windows-2022
     strategy:
       matrix:
-        Configuration: [Release] #[Release, Debug]
+        Configuration: [Release]
         Settings:
-#        - {
-#            Name: "Win32",
-#            Platform: "Win32",
-#            Architecture: "x86",
-#            Triplet: "x86-windows"
-#          }
         - {
-            Name: "Win64",
-            Platform: "x64",
-            Architecture: "x64",
-            Triplet: "x64-windows"
+            Name: "Win32",
+            Platform: "Win32",
+            Architecture: "x86",
+            Triplet: "x86-windows"
           }
           
     steps:
@@ -67,29 +61,12 @@ jobs:
       run: >
         msbuild
         /m "${{env.Solution}}"
+        /p:Platform="${{matrix.Settings.Platform}}"
         /p:Configuration="${{matrix.Configuration}}"
         /p:PlatformToolset=v143
-#/p:Platform="${{matrix.Settings.Platform}}"
-#/p:IncludePath="C:\Path\to\Include"
-#/p:LibPath="C:\Path\to\Lib"
-#/p:AdditionalIncludePaths="C:\Path\to\external\include"
-#/p:AdditionalLibraryDirectories="C:\Path\to\external\lib"
-#/p:AdditionalDependencies=file.lib
-#/p:LanguageStandard="stdcpp17"
-
       
     - name: List files
       run: ls -R
-
-#    - name: Deploy
-#      shell: cmd
-#      run: |
-#        windeployqt.exe "${{github.workspace}}/${{env.Artifacts}}/${{env.Executable}}"
-#        If exist "vcpkg\installed\${{matrix.Settings.Platform}}-windows\bin\*.dll"       (copy "vcpkg\installed\${{matrix.Settings.Platform}}-windows\bin\*.dll"       "${{env.Artifacts}}")
-#        If exist "vcpkg_installed\${{matrix.Settings.Platform}}-windows\bin\*.dll"       (copy "vcpkg_installed\${{matrix.Settings.Platform}}-windows\bin\*.dll"       "${{env.Artifacts}}")
-#        If exist "vcpkg\installed\${{matrix.Settings.Platform}}-windows\debug\bin\*.dll" (copy "vcpkg\installed\${{matrix.Settings.Platform}}-windows\debug\bin\*.dll" "${{env.Artifacts}}")
-#        If exist "vcpkg_installed\${{matrix.Settings.Platform}}-windows\debug\bin\*.dll" (copy "vcpkg_installed\${{matrix.Settings.Platform}}-windows\debug\bin\*.dll" "${{env.Artifacts}}")
-#        xcopy "assets\" "${{env.Artifacts}}\assets\" /s
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
@@ -114,17 +91,11 @@ jobs:
           echo "CommitCount=$(git rev-list --count HEAD)" >> $env:GITHUB_ENV
           echo "CommitDate=$(git show -s --date=format:'%Y-%m-%d' --format=%cd)" >> $env:GITHUB_ENV
 
-#      - name: Download Artifacts - Win32
-#        uses: actions/download-artifact@v4
-#        with:
-#          name: ${{env.Title}}-Win32-Release
-#          path: Release/Win32/
-
-      - name: Download Artifacts - Win64
+      - name: Download Artifacts - Win32
         uses: actions/download-artifact@v4
         with:
-          name: ${{env.Title}}-Win64-Release
-          path: Release/Win64/
+          name: ${{env.Title}}-Win32-Release
+          path: Release/Win32/
 
       - name: Deploy
         run: |

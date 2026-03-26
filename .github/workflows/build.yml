@@ -61,7 +61,7 @@ jobs:
       run: >
         msbuild
         /m "${{env.Solution}}"
-        /p:Platform="${{matrix.Settings.Platform}}"
+        /p:Platform="${{matrix.Settings.Architecture}}"
         /p:Configuration="${{matrix.Configuration}}"
         /p:PlatformToolset=v143
       

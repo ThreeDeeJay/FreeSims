@@ -41,14 +41,6 @@ jobs:
         --recurse-submodules
         --depth 1
 
-    - name: Install vcpkg
-      uses: lukka/run-vcpkg@v11.5
-      with:
-        vcpkgGitCommitId: c2aeddd80357b17592e59ad965d2adf65a19b22f
-    - name: Install VCPKG dependencies
-      run: |
-        vcpkg install sdl2 openal-soft --triplet ${{matrix.Settings.Triplet}}
-
     - name: Install NuGet dependencies
       run: |
         dotnet add package SharpDX.D3DCompiler
@@ -62,6 +54,14 @@ jobs:
         dotnet add package SharpDX.RawInput
         dotnet add package SharpDX.XAudio2
         dotnet add package SharpDX.XInput
+
+    - name: Install vcpkg
+      uses: lukka/run-vcpkg@v11.5
+      with:
+        vcpkgGitCommitId: c2aeddd80357b17592e59ad965d2adf65a19b22f
+    - name: Install VCPKG dependencies
+      run: |
+        vcpkg install sdl2 openal-soft --triplet ${{matrix.Settings.Triplet}}
 
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1.0.2

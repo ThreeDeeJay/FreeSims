@@ -4,10 +4,10 @@ name: Build
 env:
   GH_TOKEN: ${{github.token}}
   Branch: ${{github.ref_name}}
-  Artifacts: build/Release
+  Artifacts: bin/Release
+#  Artifacts: SimsNet/bin/Release
   Title: ${{github.event.repository.name}}
   Solution: SimsVille/SimsVille.sln
-  Executable: ${{github.event.repository.name}}.exe # *
 
 on:
   push:
@@ -61,7 +61,6 @@ jobs:
       run: >
         msbuild
         /m "${{env.Solution}}"
-        /p:Platform="${{matrix.Settings.Architecture}}"
         /p:Configuration="${{matrix.Configuration}}"
         /p:PlatformToolset=v143
       

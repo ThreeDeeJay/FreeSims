@@ -51,17 +51,17 @@ jobs:
 
     - name: Install NuGet dependencies
       run: |
-        dotnet add package SharpDX.D3DCompiler.dll
-        dotnet add package SharpDX.Direct2D1.dll
-        dotnet add package SharpDX.Direct3D11.dll
-        dotnet add package SharpDX.Direct3D11.Effects.dll
-        dotnet add package SharpDX.Direct3D9.dll
-        dotnet add package SharpDX.dll
-        dotnet add package SharpDX.DXGI.dll
-        dotnet add package SharpDX.MediaFoundation.dll
-        dotnet add package SharpDX.RawInput.dll
-        dotnet add package SharpDX.XAudio2.dll
-        dotnet add package SharpDX.XInput.dll
+        dotnet add package SharpDX.D3DCompiler
+        dotnet add package SharpDX.Direct2D1
+        dotnet add package SharpDX.Direct3D11
+        dotnet add package SharpDX.Direct3D11.Effects
+        dotnet add package SharpDX.Direct3D9
+        dotnet add package SharpDX
+        dotnet add package SharpDX.DXGI
+        dotnet add package SharpDX.MediaFoundation
+        dotnet add package SharpDX.RawInput
+        dotnet add package SharpDX.XAudio2
+        dotnet add package SharpDX.XInput
 
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1.0.2

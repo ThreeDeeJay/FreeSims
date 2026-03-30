@@ -71,7 +71,8 @@ jobs:
     - name: Deploy
       shell: cmd
       run: |
-        mkdir "${{env.Artifacts}}\Monogame\WindowsGL"
+        mkdir "${{env.Artifacts}}\Monogame"
+        move "SimsVille\packages\MonoGame.Framework.WindowsGL.3.4.0.459\lib\net40"      "${{env.Artifacts}}\Monogame\WindowsGL"
         move "SimsVille\Dependencies\MonoGame.Framework.dll"                            "${{env.Artifacts}}\Monogame\WindowsGL"
         move "SimsVille\packages\Ninject.3.3.6\lib\net45\*.dll"                         "${{env.Artifacts}}\Monogame\WindowsGL"
         move "SimsVille\packages\Ninject.3.3.6\lib\net45\*.xml"                         "${{env.Artifacts}}\Monogame\WindowsGL"
